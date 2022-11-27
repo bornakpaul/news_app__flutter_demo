@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:news_app_demo/view_model/view_state.dart';
-import 'package:news_app_demo/workflow/home/home_screen_vm.dart';
 import 'package:provider/provider.dart';
+
+import 'country_list_vm.dart';
 
 class NewsScreenWidget extends StatelessWidget {
   const NewsScreenWidget({super.key});
@@ -9,8 +10,18 @@ class NewsScreenWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Demo News App")),
-      body: const _BodyWidget(),
+      appBar: AppBar(
+        title: const Text(
+          "Countries",
+          style: TextStyle(color: Colors.blueAccent),
+        ),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+      ),
+      body: const Padding(
+        padding: EdgeInsets.all(16.0),
+        child: _BodyWidget(),
+      ),
     );
   }
 }
@@ -23,20 +34,20 @@ class _BodyWidget extends StatefulWidget {
 }
 
 class __BodyWidgetState extends State<_BodyWidget> {
-  final _viewModel = HomeScreenVM();
-  final countryCode = "in";
+  final _viewModel = CountryNameVM();
+  final countryCode = "IN";
 
   @override
   void initState() {
-    _viewModel.getData(countryCode);
+    _viewModel.getData();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<HomeScreenVM>(
+    return ChangeNotifierProvider<CountryNameVM>(
       create: (context) => _viewModel,
-      child: Consumer<HomeScreenVM>(builder: (context, viewModel, _) {
+      child: Consumer<CountryNameVM>(builder: (context, viewModel, _) {
         final viewState = viewModel.mainViewState;
         switch (viewModel.mainViewState.status) {
           case Status.loading:
@@ -49,7 +60,20 @@ class __BodyWidgetState extends State<_BodyWidget> {
             );
           case Status.success:
             final data = viewState.data!;
-            return Center(child: Text(data.articles[0].title));
+            return ListView.separated(
+              itemCount: data.countries.length,
+              itemBuilder: (context, index) {
+                return Text(
+                  "${data.countries[index].countryName} (${data.countries[index].abbreviation})",
+                  style: const TextStyle(fontSize: 18),
+                );
+              },
+              separatorBuilder: (context, index) {
+                return const SizedBox(
+                  height: 16,
+                );
+              },
+            );
         }
       }),
     );

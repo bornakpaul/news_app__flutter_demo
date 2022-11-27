@@ -45,3 +45,29 @@ class NewsServerError {
   factory NewsServerError.fromJson(Map<String, dynamic> json) =>
       _$NewsServerErrorFromJson(json);
 }
+
+@JsonSerializable(createToJson: false)
+class RegionDetails {
+  final String country;
+  final String region;
+
+  RegionDetails(
+    this.country,
+    this.region,
+  );
+
+  factory RegionDetails.fromJson(Map<String, dynamic> json) =>
+      _$RegionDetailsFromJson(json);
+}
+
+@JsonSerializable(createToJson: false)
+class CountryList {
+  final Map<String, RegionDetails> data;
+
+  CountryList(
+    this.data,
+  );
+
+  factory CountryList.fromJson(Map<String, dynamic> json) =>
+      _$CountryListFromJson(json);
+}

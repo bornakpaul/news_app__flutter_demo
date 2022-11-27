@@ -28,3 +28,16 @@ NewsServerError _$NewsServerErrorFromJson(Map<String, dynamic> json) =>
     NewsServerError(
       json['message'] as String,
     );
+
+RegionDetails _$RegionDetailsFromJson(Map<String, dynamic> json) =>
+    RegionDetails(
+      json['country'] as String,
+      json['region'] as String,
+    );
+
+CountryList _$CountryListFromJson(Map<String, dynamic> json) => CountryList(
+      (json['data'] as Map<String, dynamic>).map(
+        (k, e) =>
+            MapEntry(k, RegionDetails.fromJson(e as Map<String, dynamic>)),
+      ),
+    );

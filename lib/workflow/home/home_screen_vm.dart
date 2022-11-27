@@ -12,7 +12,16 @@ class HomeScreenVM extends ChangeNotifier {
       notifyListeners();
     }
     ApiClient.get('top-headlines?country=$countryCode').then((value) {
-      print("value : ${value}");
+      mainViewState = ViewState.success(News.fromJson(value));
+      notifyListeners();
+    }).catchError((error, stackTrace) {
+      mainViewState = ViewState.error(error, stackTrace);
+      notifyListeners();
+    });
+  }
+
+  void getSearchedData(String query) {
+    ApiClient.get('everything?q=$query').then((value) {
       mainViewState = ViewState.success(News.fromJson(value));
       notifyListeners();
     }).catchError((error, stackTrace) {
