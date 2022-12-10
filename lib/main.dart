@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:news_app_demo/workflow/home/home_screen_widget.dart';
+import 'package:news_app_demo/workflow/home_model/country.dart';
 
-void main() {
+void main() async {
+  await Hive.initFlutter();
+  Hive.registerAdapter(CountryDataAdapter());
+  Hive.registerAdapter(CountryAdapter());
   runApp(const MyApp());
 }
 
